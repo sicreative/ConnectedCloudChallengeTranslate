@@ -22,5 +22,5 @@ Mbed and IOS reference of README.md under relative directory.
 ### 3. Lambra python source 
 lambda.py
 
-Build new lambda function under AWS console and paste it, set relative kinesis steam trigger.
+Build new lambda function under AWS console and paste it, set relative kinesis stream trigger.
 
