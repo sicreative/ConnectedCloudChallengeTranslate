@@ -20,9 +20,10 @@ More detail:
 6. mbed compile -t GCC_ARM -m CY8CKIT_062_WIFI_BT -f --sterm
 
 ### IOS APP source code
+https://github.com/sicreative/ConnectedCloudChallenge/tree/master/ios-os-mailbox
 
 ### Lambra python source 
-
+https://github.com/sicreative/ConnectedCloudChallenge/
 
 ### WIFI Driver issue under Mbed
 Be notice, by reference of latest PSOC6 library, the Mbed
