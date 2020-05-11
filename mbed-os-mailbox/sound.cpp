@@ -382,8 +382,8 @@ int sound_record_start_pos = 0;
 int sound_record_end_pos = 0;
 int sound_playingblock = 0;
 int sound_endblock = 0;
-int sound_steam_start_pos = 0;
-int sound_steam_end_pos = 0;
+int sound_stream_start_pos = 0;
+int sound_stream_end_pos = 0;
 
 bool sound_rec = false;
 bool sound_play = false;
@@ -406,7 +406,7 @@ void i2s_int();
 
 
 int16_t sound_buffer[SOUND_STEAM_BUFFER_SIZE*SOUND_STEAM_BUFFER_MUL*128+10];
-bool sound_steam_onoff = false;
+bool sound_stream_onoff = false;
 
 void sound_stop_playback(){
 
@@ -500,7 +500,7 @@ void sound_start_playback(int start,int end){
 
 void sound_start_record(){
 
-	/* suspend last record if steam not finish */
+	/* suspend last record if stream not finish */
 
 
 
@@ -510,8 +510,8 @@ void sound_start_record(){
 
 	sound_record_end_pos = sound_record_start_pos+1;
 
-	sound_steam_start_pos =  sound_record_start_pos;
-	sound_steam_end_pos = sound_record_start_pos;
+	sound_stream_start_pos =  sound_record_start_pos;
+	sound_stream_end_pos = sound_record_start_pos;
 
 	/* Startup PDM and I2S */
 	Cy_PDM_PCM_Enable(CYBSP_PDM_HW);
@@ -559,10 +559,10 @@ void sound_stop_record(){
 
 	 sound_rec = false;
 
-	 sound_steam_start_pos = sound_record_start_pos;
-	 sound_steam_end_pos = sound_record_end_pos;
+	 sound_stream_start_pos = sound_record_start_pos;
+	 sound_stream_end_pos = sound_record_end_pos;
 
-	 sound_steam_onoff = true;
+	 sound_stream_onoff = true;
 
 
 
@@ -880,16 +880,16 @@ void sound_init(){
 	
 }
 
-int sound_num_wait_for_steam(){
+int sound_num_wait_for_stream(){
 
-	if (!sound_steam_onoff || sound_steam_start_pos == sound_steam_end_pos)
+	if (!sound_stream_onoff || sound_steam_start_pos == sound_steam_end_pos)
 		return 0;
 
-	bool back = sound_steam_start_pos>sound_steam_end_pos;
+	bool back = sound_stream_start_pos>sound_steam_end_pos;
 
 
-	int len = sound_steam_start_pos>sound_steam_end_pos?RECORD_SOUND_TOTAL_BLOCK-sound_steam_start_pos+1+sound_steam_end_pos:
-										sound_steam_end_pos-sound_steam_start_pos;
+	int len = sound_stream_start_pos>sound_steam_end_pos?RECORD_SOUND_TOTAL_BLOCK-sound_steam_start_pos+1+sound_steam_end_pos:
+										sound_stream_end_pos-sound_steam_start_pos;
 
 
 	return len;
@@ -898,23 +898,23 @@ int sound_num_wait_for_steam(){
 
 
 
-int sound_steam(int16_t* buffer){
+int sound_stream(int16_t* buffer){
 
 
-	if (!sound_steam_onoff)
+	if (!sound_stream_onoff)
 		return 0;
 
-	if (sound_steam_end_pos>=sound_steam_start_pos && sound_steam_end_pos-sound_steam_start_pos<SOUND_STEAM_BUFFER_SIZE)
-		sound_steam_onoff=false;
+	if (sound_stream_end_pos>=sound_steam_start_pos && sound_steam_end_pos-sound_steam_start_pos<SOUND_STEAM_BUFFER_SIZE)
+		sound_stream_onoff=false;
 
-	fram_read_sound(sound_steam_start_pos,SOUND_STEAM_BUFFER_SIZE,(void*)buffer);
+	fram_read_sound(sound_stream_start_pos,SOUND_STEAM_BUFFER_SIZE,(void*)buffer);
 
-	APP_INFO(("sound_load_steam %d,   %d\n",sound_steam_start_pos,sound_steam_end_pos));
+	APP_INFO(("sound_load_stream %d,   %d\n",sound_steam_start_pos,sound_steam_end_pos));
 
-	sound_steam_start_pos+=SOUND_STEAM_BUFFER_SIZE;
+	sound_stream_start_pos+=SOUND_STEAM_BUFFER_SIZE;
 
-	if (sound_steam_start_pos>=RECORD_SOUND_TOTAL_BLOCK)
-		sound_steam_start_pos = 0;
+	if (sound_stream_start_pos>=RECORD_SOUND_TOTAL_BLOCK)
+		sound_stream_start_pos = 0;
 
 
 	return SOUND_STEAM_BUFFER_SIZE;

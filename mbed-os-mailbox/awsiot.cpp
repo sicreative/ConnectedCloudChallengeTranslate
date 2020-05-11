@@ -73,7 +73,7 @@ int awsiot_unsubscribe(const char* topic);
 int awsiot_publish( const char* message,const char* topic);
 void awsiot_update(string name, string value,bool publish);
 void awsiot_connect_thread( NetworkInterface* network,bool retry );
-int awsiot_publish_steam( const char* message,const char* command, int size);
+int awsiot_publish_stream( const char* message,const char* command, int size);
 void awsiot_connect_start_thread( NetworkInterface* network);
 
 
@@ -313,7 +313,7 @@ void awsiot_subscribe_get_callback( aws_iot_message_t& md){
 }
 
 
-/* loop for AWSIOT  publish / steam, Shadows subscribe listening */
+/* loop for AWSIOT  publish / stream, Shadows subscribe listening */
 /* All MQTT active within this loop */
 
 int awsiot_shadow_cycle(){
@@ -364,9 +364,9 @@ while(true){
 		}
 # endif
 
-	/* enquire for any waiting sound steam and work for that */
-	int num_of_sound_steam = sound_num_wait_for_steam();
-	if (num_of_sound_steam>0){
+	/* enquire for any waiting sound stream and work for that */
+	int num_of_sound_stream = sound_num_wait_for_steam();
+	if (num_of_sound_stream>0){
 
 		int buffer_size = SOUND_STEAM_BUFFER_SIZE*128+4+1;
 
@@ -378,15 +378,15 @@ while(true){
 		char rules[64];
 		sprintf (rules,"$aws/rules/Voice/%s/sound/send",AWSIOT_THING_NAME);
 
-		int total_length = num_of_sound_steam/SOUND_STEAM_BUFFER_SIZE;
+		int total_length = num_of_sound_stream/SOUND_STEAM_BUFFER_SIZE;
 
-		APP_INFO(( "Start steam %d, section %d\n\r", num_of_sound_steam,total_length ));
+		APP_INFO(( "Start stream %d, section %d\n\r", num_of_sound_steam,total_length ));
 
 		time_t last_time = time(NULL);
 		int count = 0;
 
 		/*Loop for send MQTT message, sample dismiss last if size not alignment */
-		while(sound_steam(sound_buffer)>=SOUND_STEAM_BUFFER_SIZE){
+		while(sound_stream(sound_buffer)>=SOUND_STEAM_BUFFER_SIZE){
 
 
 			/* time stamp */
@@ -424,8 +424,8 @@ while(true){
 					APP_INFO(( "BASE64 Error %d\r\n",len ));
 			}
 
-			/* publish the steam */
-			awsiot_publish_steam(base64buffer,rules,len);
+			/* publish the stream */
+			awsiot_publish_stream(base64buffer,rules,len);
 
 			APP_INFO(("%" PRId64 "\n",now ));
 
@@ -713,7 +713,7 @@ int awsiot_publish( const char* message){
 }
 
 
-int awsiot_publish_steam( const char* message, const char* topic,int size){
+int awsiot_publish_stream( const char* message, const char* topic,int size){
 
 
 	cy_rslt_t result = client->publish( topic, message, size, publish_params );
