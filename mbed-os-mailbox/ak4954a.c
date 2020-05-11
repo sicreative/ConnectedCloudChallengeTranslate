@@ -137,6 +137,7 @@ uint32_t ak4954a_activate(void)
     uint32_t ret;
     
     /* Enable Power Management DAC */
+    /*	Use AK4954A's PLL */
     ret = ak4954a_transmit(AK4954A_REG_PWR_MGMT1, AK4954A_PWR_MGMT2_PMPLL |
                            AK4954A_PWR_MGMT1_PMDAC | AK4954A_PWR_MGMT1_PMVCM);
     if (ret) return ret;
