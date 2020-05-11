@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0
 Demo for element14  Connected Cloud Challenge project
 
 LED and ALS sensor for sense the mail.
-Record Sound from TFT shield PDM MIC to on-board FRAM, steam via AWSIoT and work speech to text translate.
+Record Sound from TFT shield PDM MIC to on-board FRAM, stream via AWSIoT and work speech to text translate.
 Use AWS IoT shadow connected with IOS APP
 
 More detail: 
